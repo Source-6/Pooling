@@ -11,7 +11,7 @@ public class SpawnPoint : MonoBehaviour
     [SerializeField] private Transform target;
     void Start()
     {
-        pool = new(gameObject, prefab, 10);
+        pool = new(gameObject, prefab, 2);
         StartCoroutine(Spawn());
     }
 

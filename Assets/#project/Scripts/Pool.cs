@@ -9,12 +9,20 @@ where T : IPoolClient               //en gros doit "T" doit avoir interface (t h
     private GameObject anchor;
     private GameObject prefab; 
     private Queue<T> queue = new();
-    public Pool(GameObject anchor, GameObject prefab, int n)  //constructeur
+    private int batch;
+    public Pool(GameObject anchor, GameObject prefab, int batch)  //constructeur
     {
         this.anchor = anchor;
         this.prefab = prefab;
+        this.batch = batch;
 
-        for (int _ = 0; _ < n; _++)
+        CreateBatch();
+
+    }
+
+    private void CreateBatch()
+    {
+        for (int _ = 0; _ < batch; _++)
         {
             GameObject go = GameObject.Instantiate(prefab);
             if (go.TryGetComponent(out T client))
@@ -23,7 +31,7 @@ where T : IPoolClient               //en gros doit "T" doit avoir interface (t h
             }
             else
             {
-                throw new ArgumentException("prefab doesn't have  IPoolClient component");
+                throw new ArgumentException("prefab doesn't have IPoolClient component");
             }
         }
     }
@@ -36,6 +44,7 @@ where T : IPoolClient               //en gros doit "T" doit avoir interface (t h
 
     public T Get()
     {
+        if (queue.Count == 0) CreateBatch();
         T client = queue.Dequeue();
         client.Arise(anchor.transform.position, anchor.transform.rotation);
         return client;

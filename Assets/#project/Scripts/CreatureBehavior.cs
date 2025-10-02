@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CreatureBehavior : MonoBehaviour, IPoolClient
 {
-    public SpawnPoint sp;
+    [HideInInspector] public SpawnPoint sp;
     public void Arise(Vector3 position, Quaternion rotation)
     {
         gameObject.SetActive(true);
